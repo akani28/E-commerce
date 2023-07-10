@@ -18,7 +18,18 @@ function printProducts(db){
         
         html +=`
         <div class="product">
-                <p>${product.name}</p>
+            <div class="product_img">
+                <img src="${product.image}" alt="imagen">
+            </div>
+
+            <div class="product_info">
+            <h4>${product.name}<b> | </b><span><b>stock</b>: ${product.quantity}</span></h4>
+            <h5>
+            $${product.price}
+            <i class='bx bxs-message-square-add' id="${product.id}" ></i>
+            </h5>
+        </div>
+               
         </div>
         `
         productsHTML.innerHTML= html;
