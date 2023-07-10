@@ -11,8 +11,27 @@ try {
 }
 
 }
+function printProducts(db){
+    const productsHTML = document.querySelector(".products");
+    let html="";
+    for(const product of db.products){
+        
+        html +=`
+        <div class="product">
+                <p>${product.name}</p>
+        </div>
+        `
+        productsHTML.innerHTML= html;
+    }
+}
 async function main(){
-    const res = JSON.parse(window.localStorage.getItem("products"))||(await getProducts()) ;
-    console.log(res); 
+    db={
+        products:JSON.parse(window.localStorage.getItem("products"))||(await getProducts()),
+        cart:{}
+    }
+    console.log(db); 
+    printProducts(db);
+    
+
 }
 main();
