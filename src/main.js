@@ -23,13 +23,12 @@ function printProducts(db){
             </div>
 
             <div class="product_info">
-            <h4>${product.name}<b> | </b><span><b>stock</b>: ${product.quantity}</span></h4>
-            <h5>
-            $${product.price}
-            <i class='bx bxs-message-square-add' id="${product.id}" ></i>
-            </h5>
-        </div>
-               
+                <h4>${product.name}<b> | </b><span><b>stock</b>: ${product.quantity}</span></h4>
+                <h5>
+                $${product.price}
+                    <i class='bx bxs-message-square-add' id="${product.id}" ></i>
+                </h5>
+            </div>
         </div>
         `
         productsHTML.innerHTML= html;
@@ -43,14 +42,7 @@ function handleShowCart() {
         cartHTML.classList.toggle("cart_show");
     });
 }
-async function main(){
-    db={
-        products:JSON.parse(window.localStorage.getItem("products"))||(await getProducts()),
-        cart:{}
-    }
-    console.log(db); 
-    printProducts(db);
-    handleShowCart();
+function addToCartFromProducts(db){
     const productsHTML = document.querySelector(".products");
     productsHTML.addEventListener("click", function(e){
         if(e.target.classList.contains("bxs-message-square-add")){
@@ -63,11 +55,52 @@ async function main(){
                 db.cart[productFind.id]={...productFind,amount:1};
 
             }
+            window.localStorage.setItem("cart",JSON.stringify(db.cart));
+            printProductInCart(db);
         }
-        console.log(db.cart);
     })
-    console.log(productsHTML)
 
+}
+function printProductInCart(db){
+    const cartProducts= document.querySelector(".card_products");
+    console.log(cartProducts);
+    let html="";
+    for(const product in db.cart){
+        const {quantity, price, name, image, id, amount} = db.cart[product];
+
+        console.log(db.cart[product]);
+        html += `
+        <div class="card_product">
+            <div class="card_product--img">
+                <img src="${image}" alt="imagen">
+            </div>
+            <div class="card_products--body">
+                <h4>${name} | ${price}</h4>
+                <p>Stock: ${quantity}</p>
+                <div class="card_product--body-op">
+                        <i class='bx bx-minus'></i>
+                        <span>${amount} unit</span>
+                        <i class='bx bx-plus'></i>
+                        <i class='bx bx-trash'></i>
+                </div>
+            </div>
+        </div>
+        `
+
+    }
+    cartProducts.innerHTML=html;
+
+} 
+async function main(){
+    db={
+        products:JSON.parse(window.localStorage.getItem("products"))||(await getProducts()),
+        cart:JSON.parse(window.localStorage.getItem("cart"))||{}
+    }
+    console.log(db); 
+    printProducts(db);
+    handleShowCart();
+    addToCartFromProducts(db);
+    printProductInCart(db);
     
 
 }
