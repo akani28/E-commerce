@@ -35,6 +35,14 @@ function printProducts(db){
         productsHTML.innerHTML= html;
     }
 }
+function handleShowCart() {
+    const iconCartHTML = document.querySelector(".bxs-cart");
+    const cartHTML = document.querySelector(".cart");
+    
+    iconCartHTML.addEventListener("click", function(){
+        cartHTML.classList.toggle("cart_show");
+    });
+}
 async function main(){
     db={
         products:JSON.parse(window.localStorage.getItem("products"))||(await getProducts()),
@@ -42,6 +50,24 @@ async function main(){
     }
     console.log(db); 
     printProducts(db);
+    handleShowCart();
+    const productsHTML = document.querySelector(".products");
+    productsHTML.addEventListener("click", function(e){
+        if(e.target.classList.contains("bxs-message-square-add")){
+            const id = Number(e.target.id);
+            const productFind = db.products.find((product) => product.id===id);
+            if(db.cart[productFind.id]){
+                if(productFind.quantity===db.cart[productFind.id].amount)return alert("No tenemos mas en Bodega");
+                db.cart[productFind.id].amount++;
+            }else{
+                db.cart[productFind.id]={...productFind,amount:1};
+
+            }
+        }
+        console.log(db.cart);
+    })
+    console.log(productsHTML)
+
     
 
 }
