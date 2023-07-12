@@ -22,7 +22,7 @@ img{
 /*the navbar------------------------------------*/
 header{
     height: var(--h-header);
-    background-color:lavenderblush;
+    background-color:red;
     top: 0;
 
     position: fixed;
@@ -30,18 +30,64 @@ header{
     left: 0;
     display: flex;
 }
+/*modificcaciones en el navbar*/
 header > nav{
     width: 100%;
     max-width: 1024px;
     margin: 0 auto;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     padding: 0 1rem;
 }
 header > nav > i{
     font-size: 2rem;
     cursor: pointer;
+    position: relative;
+}
+.menu{
+    background-color: blueviolet;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+}
+.menuItems{
+background-color: blue;
+display: flex;
+flex-direction: row;
+justify-content: center;
+    align-items: center;
+gap: 1rem;
+font-size: 1.2rem;
+}
+ul{
+    list-style: none;
+    align-items: flex-starts;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+/*--------------------------------------------------------------------*/
+.amountProducts {
+    font-size: 0.8rem;
+    width: 20px;
+    height: 20px;
+    background-color:red;
+    border: 2px solid black;
+    color: white;
+    display: inline-block;
+    border-radius: 50%;
+    position: absolute;
+    right: 195px;
+    top: 1.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 /*---products-------------------------------------*/
 .products{
