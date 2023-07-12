@@ -74,6 +74,11 @@ section{
     justify-content: center;
 
 }
+#footer{
+    background-color: rgb(218, 213, 213);
+    min-height: 50vh;
+    padding: 0.5rem;
+}
 ul{
     list-style: none;
     align-items: flex-starts;
@@ -125,7 +130,49 @@ p{
 
 }
 
-/*---------------------------------------------*/
+/*-------------------footer--------------------------*/
+.footer_content{
+    height: 300px;
+    width: 1024px;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    justify-content: center;
+}
+.info_page{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 2rem;
+}
+.info_page p{
+    width: 100px;
+    font-size: 1rem;
+    color:lightcoral;
+}
+.info_page span{
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.info_creator{
+    background-color:crimson;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    display: grid;
+    place-items: center;
+}
+.info_creator p{
+    color: white;
+
+}
+.info_creator a{
+    font-weight: bold;
+    color: cornflowerblue;
+}
+
+
+/*-------------------------------------*/
 .amountProducts {
     font-size: 0.8rem;
     width: 20px;
