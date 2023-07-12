@@ -68,7 +68,7 @@ function printProductInCart(db){
     for(const product in db.cart){
         const {quantity, price, name, image, id, amount} = db.cart[product];
 
-        console.log(db.cart[product]);
+        //console.log(db.cart[product]);
         html += `
         <div class="cart_product">
             <div class="cart_product--img">
@@ -77,7 +77,7 @@ function printProductInCart(db){
             <div class="cart_products--body">
                 <h4>${name} | ${price}</h4>
                 <p>Stock: ${quantity}</p>
-                <div class="cart_product--body-op">
+                <div class="cart_product--body-op" id=${id}>
                         <i class='bx bx-minus'></i>
                         <span>${amount} unit</span>
                         <i class='bx bx-plus'></i>
@@ -91,6 +91,47 @@ function printProductInCart(db){
     cartProducts.innerHTML=html;
 
 } 
+function handleProductInCart(db){
+    const cart_products=document.querySelector(".cart_products");
+    console.log(cart_products)
+    cart_products.addEventListener("click", function(e){
+        if(e.target.classList.contains("bx-plus")){
+                const id = Number(e.target.parentElement.id);
+                const productFind = db.products.find((product) => product.id===id);
+                if(productFind.quantity===db.cart[productFind.id].amount)return alert("No tenemos mas en Bodega");
+                db.cart[id].amount++;
+            }
+        if(e.target.classList.contains("bx-minus")){ 
+                const id = Number(e.target.parentElement.id);
+                const productFind = db.products.find((product) => product.id===id);
+                if(db.cart[id].amount===1){
+                    const response = confirm("¿Estas seguro que deseas eliminar este producto?")
+                    if(!response){return;}
+                    delete db.cart[id];
+                    }else{
+                        db.cart[id].amount--;
+                    }
+                
+                
+        }
+        if(e.target.classList.contains("bx-trash")){
+                const id = Number(e.target.parentElement.id);
+                if(db.cart[id].amount===1){
+                    const response = confirm("¿Estas seguro que deseas eliminar este producto?")
+                    if(!response){return;}
+                    delete db.cart[id];
+                    }else{
+                        db.cart[id].amount--;
+                    }
+                
+        }
+        window.localStorage.setItem("cart", JSON.stringify(db.cart));
+        printProductInCart(db);
+    });
+
+
+
+}
 async function main(){
     db={
         products:JSON.parse(window.localStorage.getItem("products"))||(await getProducts()),
@@ -101,7 +142,9 @@ async function main(){
     handleShowCart();
     addToCartFromProducts(db);
     printProductInCart(db);
+    handleProductInCart(db)
+ 
     
-
+    
 }
 main();

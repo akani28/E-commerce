@@ -140,8 +140,34 @@ header > nav > i{
     color: crimson;
 }
 .cart_total{
-    background-color: green;
     height: 15%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    gap: 0.5rem;
+}
+.cart__total--info{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.btn__buy{
+    padding: 0.5rem;
+    width: 100%;
+    background-color: lightcoral;
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor:pointer;
+    border: none;
+    border-radius: 0.5rem;
+    transition: transform 0.5s;
+
+}
+.btn__buy:active{
+    transform: scale(0.8);
 }
 @media (max-width: 500px) {
     .cart{
