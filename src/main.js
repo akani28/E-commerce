@@ -62,7 +62,7 @@ function addToCartFromProducts(db){
 
 }
 function printProductInCart(db){
-    const cartProducts= document.querySelector(".card_products");
+    const cartProducts= document.querySelector(".cart_products");
     console.log(cartProducts);
     let html="";
     for(const product in db.cart){
@@ -70,14 +70,14 @@ function printProductInCart(db){
 
         console.log(db.cart[product]);
         html += `
-        <div class="card_product">
-            <div class="card_product--img">
+        <div class="cart_product">
+            <div class="cart_product--img">
                 <img src="${image}" alt="imagen">
             </div>
-            <div class="card_products--body">
+            <div class="cart_products--body">
                 <h4>${name} | ${price}</h4>
                 <p>Stock: ${quantity}</p>
-                <div class="card_product--body-op">
+                <div class="cart_product--body-op">
                         <i class='bx bx-minus'></i>
                         <span>${amount} unit</span>
                         <i class='bx bx-plus'></i>
