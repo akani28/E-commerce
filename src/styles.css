@@ -74,6 +74,16 @@ header > nav > i{
     font-weight: normal;
     font-size: 0.8rem;
 }
+.product_info .sold{
+    display:inline-block;
+    color:crimson;
+    background-color: lightblue;
+    padding: 0.5rem 1rem;
+    user-select: none;
+    border-radius: 5px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+}
 .product_info .bx{
     background-color:black;
     padding: 0.3rem;

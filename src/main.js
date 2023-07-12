@@ -26,7 +26,9 @@ function printProducts(db){
                 <h4>${product.name}<b> | </b><span><b>stock</b>: ${product.quantity}</span></h4>
                 <h5>
                 $${product.price}
-                    <i class='bx bxs-message-square-add' id="${product.id}" ></i>
+                ${product.quantity ? `<i class='bx bxs-message-square-add' id="${product.id}" ></i>` : `<span class="sold">Sold out</span>`
+            }
+                    
                 </h5>
             </div>
         </div>
@@ -57,6 +59,7 @@ function addToCartFromProducts(db){
             }
             window.localStorage.setItem("cart",JSON.stringify(db.cart));
             printProductInCart(db);
+            printTotal(db);
         }
     })
 
@@ -116,20 +119,69 @@ function handleProductInCart(db){
         }
         if(e.target.classList.contains("bx-trash")){
                 const id = Number(e.target.parentElement.id);
-                if(db.cart[id].amount===1){
-                    const response = confirm("¿Estas seguro que deseas eliminar este producto?")
-                    if(!response){return;}
+                const response = confirm("¿Estas seguro que deseas eliminar este producto?");
+                if(!response){
+                    return;
+                }else{
+
                     delete db.cart[id];
-                    }else{
-                        db.cart[id].amount--;
-                    }
+                }
+                
                 
         }
         window.localStorage.setItem("cart", JSON.stringify(db.cart));
         printProductInCart(db);
+        printTotal(db);
     });
 
 
+
+}
+function printTotal(db) {
+    const infoTotal = document.querySelector(".info__total");
+    const infoAmount = document.querySelector(".info__amount");
+
+    let totalProducts = 0;
+    let amountProducts = 0;
+
+    for(const product in db.cart){
+        const { amount, price} = db.cart[product];
+        totalProducts += price * amount;
+        amountProducts += amount;
+
+    }
+    infoAmount.textContent = "$" + amountProducts + " units";
+    infoTotal.textContent = "$" + totalProducts + ".00";
+}
+function handleTotal(db){
+    const btnBuy=document.querySelector(".btn__buy");
+    btnBuy.addEventListener("click", function(){
+        if(!Object.values(db.cart).length)
+        return alert("Enserio no vas a comprar nada????");
+        const response = confirm("Seguro vas a gastar solo eso?");
+        if(!response) return;
+
+        const currentProducts = [];
+        for(const product of db.products){
+            const productCart = db.cart[product.id];
+            if(product.id === productCart?.id){
+                currentProducts.push({
+                    ...product,
+                    quantity: product.quantity - productCart.amount,
+                });
+            }else{
+                currentProducts.push(product);
+            }
+
+        }
+        db.products = currentProducts;
+        db.cart = {}
+        window.localStorage.setItem("products", JSON.stringify(db.products));
+        window.localStorage.setItem("cart", JSON.stringify(db.cart));
+        printTotal(db);
+        printProductInCart(db);
+        printProducts(db);
+    });
 
 }
 async function main(){
@@ -142,8 +194,14 @@ async function main(){
     handleShowCart();
     addToCartFromProducts(db);
     printProductInCart(db);
-    handleProductInCart(db)
- 
+    handleProductInCart(db);
+    printTotal(db);
+    handleTotal(db);
+
+
+    
+
+    
     
     
 }
