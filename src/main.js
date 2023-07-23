@@ -23,7 +23,7 @@ function printProducts(db){
             </div>
 
             <div class="product_info">
-                <h4>${product.name}<b> | </b><span><b>stock</b>: ${product.quantity}</span></h4>
+                <h4 class="modal" id="${product.id}">${product.name}<b> | </b><span><b>stock</b>: ${product.quantity}</span></h4>
                 <h5>
                 $${product.price}
                 ${product.quantity ? `<i class='bx bxs-message-square-add' id="${product.id}" ></i>` : `<span class="sold">Sold out</span>`
@@ -67,7 +67,7 @@ function addToCartFromProducts(db){
 }
 function printProductInCart(db){
     const cartProducts= document.querySelector(".cart_products");
-    console.log(cartProducts);
+    //console.log(cartProducts);
     let html="";
     for(const product in db.cart){
         const {quantity, price, name, image, id, amount} = db.cart[product];
@@ -97,7 +97,7 @@ function printProductInCart(db){
 } 
 function handleProductInCart(db){
     const cart_products=document.querySelector(".cart_products");
-    console.log(cart_products)
+    //console.log(cart_products)
     cart_products.addEventListener("click", function(e){
         if(e.target.classList.contains("bx-plus")){
                 const id = Number(e.target.parentElement.id);
@@ -198,12 +198,103 @@ function handlePrintAmountProducts(db){
     }
     amountProducts.textContent = amount;
 }
+//---------funciones de prueba--------
+function printProductInModal(db){
+    const modalErrorHTML = document.querySelector(".modalError");
+    console.log(modalErrorHTML);
+    let html="";
+    for(const product in db.products) {
+        const{description, quantity, price, name, image, id, amount} = db.products[product];
+        html = `
+        <div class="modalError">
+        <div class="modal_close">
+        <i class='bx bxs-x-circle'></i>
+        </div>
+        <div class="modal_image">
+        <img src="${image}" alt="image">
+        </div>
+        <div class="modal_name"><p>${name}</p></div>
+        <div class="modal_info"><p>${description}</p></div>
+        <div class="modal_footer">
+        <div><p>${price}</p><i class='bx bxs-plus-circle'></i></div>
+        <p>${quantity}</p>
+        </div>
+        </div>
+        `
+    }
+    modalErrorHTML.innerHTML += html;
+    
+}
+function addToModalFromProducts(db){
+    const productsHTML = document.querySelector(".products");
+    productsHTML.addEventListener("click", function(e) {
+        if(e.target.classList.contains("modal")){
+            const id= Number(e.target.id);
+            const productFound = db.products.find(function(product){
+                return product.id === id;
+            });
+            console.log("id de la",e.target.id);
+            console.log(productFound);
+            handleToShowModal();
+        }
+    
+        
+    });
+}
+function modal(){
+    productsHTML.addEventListener("click", function(e){
+        console.log(e.target.getAttribute("src"));
+        console.log(e.target.classList.contains(".product"));
+        if(e.target.classList.contains("products")){
+        contentModalErrorHTML.classList.toggle("contentModalError_show");
+            
+    }
+    });
+    iconClose.addEventListener("click", function(){
+        contentModalErrorHTML.classList.remove("contentModalError_show");
+
+
+    });
+
+
+}
+function filter(){
+    const buttons = document.querySelectorAll(".buttons .btn");
+    buttons.forEach(function(button){
+        button.addEventListener("click", function(e){
+            const filter = e.target.id;
+                console.log(e.target.id);
+                if(filter === "all"){
+                    printProducts(db);
+                    console.log(db.products[0]);
+                }else{
+                    const newArray =db.products.filter(function(product){
+                        for(const key in product){
+                            console.log(product[key]);
+                        }
+                        return product.category === filter;
+                    });
+                    printProducts(newArray);
+                }
+        });
+
+    });
+    
+}
+function handleToShowModal() {
+    const iconCloseHTML = document.querySelector(".icon_close");
+    const cardModal_products = document.querySelector(".cardModal");
+    cardModal_products.classList.add("cardModal_show");
+    iconCloseHTML.addEventListener("click", function(){
+        cardModal_products.classList.remove("cardModal_show");
+    })
+}
 async function main(){
     db={
         products:JSON.parse(window.localStorage.getItem("products"))||(await getProducts()),
         cart:JSON.parse(window.localStorage.getItem("cart"))||{}
     }
-    console.log(db); 
+    //console.log(db); 
     printProducts(db);
     handleShowCart();
     addToCartFromProducts(db);
@@ -212,14 +303,39 @@ async function main(){
     printTotal(db);
     handleTotal(db);
     handlePrintAmountProducts(db);
+    //printProductInModal(db);
+    //addToModalFromProducts(db);
 
+
+    const productsHTML = document.querySelector(".products");
+    const cardModalproductsHTML = document.querySelector(".cardModal_products");
+    productsHTML.addEventListener("click", function(e) {
+        if(e.target.classList.contains("modal")){
+            const id= Number(e.target.id);
+            const productFound = db.products.find(function(product){
+                return product.id === id;
+            });
+            console.log(productFound);
+            const {name, image} = productFound;
+            let html = `
+            <div class="cardModal_products">
+                <div class="modal_image">
+                    <img src="${image}" alt="imagen">
+                </div>
+            <div class="modal_name">
+                <p>${name}</p>
+            </div>
+        </div>
+            `;
+            cardModalproductsHTML.innerHTML=html;
+            handleToShowModal();
+        }
     
-
-
-    
-
-    
+        
+    });
     
     
 }
 main();
+
+
